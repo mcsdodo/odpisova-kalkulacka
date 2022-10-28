@@ -4,6 +4,11 @@ on:
   push:
     branches: [ "master", "build-flow" ]
     
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+    
 jobs:
   deploy: 
     runs-on: ubuntu-latest
