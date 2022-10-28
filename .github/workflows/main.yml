@@ -5,8 +5,16 @@ on:
     branches: [ "master", "build-flow" ]
     
 jobs:
-  build: 
+  deploy: 
     runs-on: ubuntu-latest
     
     steps:
     - uses: actions/checkout@v3
+    
+    - name: Deploy React to GitHub Pages
+      # You may pin to the exact commit or the version.
+      # uses: bitovi/github-actions-react-to-ghp@1782b3410beca05fb72bd089e5620790c0c4d883
+      uses: bitovi/github-actions-react-to-ghp@v1.2.0
+      with:
+        # Specifies the path of the static assets after building
+        path: build
