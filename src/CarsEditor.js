@@ -1,6 +1,8 @@
 import P from './P.js'
-import { Form, Col, Row, Table, Accordion, ListGroup, Button, Offcanvas } from 'react-bootstrap';
-import React, { useState } from 'react';
+import { Form, Col, Row, Table, Accordion, ListGroup, Button, Offcanvas, InputGroup } from 'react-bootstrap';
+import React, { useState, useContext } from 'react';
+
+import { CarsContext } from './CarsContext';
 
 function CarEditorRow({ ...props }) {
     return (
@@ -44,49 +46,65 @@ function CarEditorRow({ ...props }) {
     )
 }
 
-function CarsEditor({ name, myCars, setCarPropWithId }) {
-    const [show, setShow] = useState(true);
+function CarsEditor({ name }) {
 
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
+    const [myCars, setMyCars] = useContext(CarsContext);
 
-    const cars = Object.entries(myCars).map(([key, val]) => val);
+    const setCarPropWithId = (id, prop, val) => setMyCars(prev => {
+        const updatedCar = { ...prev[id], [prop]: val };
+        const updatedCars = { ...prev, [id]: updatedCar };
+        return updatedCars;
+    });
+
+    const cars = Object.entries(myCars).map(([key, val]) => ({ ...val, id: key }));
 
     return (
         <>
-            <Button variant="primary" onClick={handleShow} className="me-2">
-                {name}
+            <ListGroup variant="flush" className="">
+                {cars.map(car =>
+                    <ListGroup.Item className="d-flex align-items-start rounded-3 mb-2 border">
+                        <div className="p-2">
+                            <Form.Control type="text"
+                                value={car.name}
+                                onChange={e => setCarPropWithId(car.id, "name", e.target.value)}
+                            />
+                        </div>
+                        <div className="p-2">
+                            <InputGroup>
+                                <Form.Control type="number" value={car.price} min="1"
+                                    onChange={e => setCarPropWithId(car.id, "price", e.target.value)}
+                                />
+                                <InputGroup.Text>€</InputGroup.Text>
+                            </InputGroup>
+                        </div>
+                        <div className="p-2">
+                            <InputGroup>
+                                <Form.Control type="number" value={car.writeoff} min="1" max="4"
+                                    onChange={e => setCarPropWithId(car.id, "writeoff", e.target.value)}
+                                />
+                            </InputGroup>
+                        </div>
+
+                        <div className="p-2">
+                            <InputGroup>
+                                <Form.Control type="number" value={car.resaleValue} min="0" max="1" step="0.1"
+                                    onChange={e => setCarPropWithId(car.id, "resaleValue", e.target.value)}
+                                />
+                            </InputGroup>
+                        </div>
+
+                        <div className="ms-auto p-2">
+                            <Button variant="danger">
+                                <i className="bi bi-trash"></i>
+                            </Button>
+                        </div>
+                    </ListGroup.Item>
+                )}
+            </ListGroup>
+            <Button variant="success">
+                <i className="bi bi-plus-square"></i>
             </Button>
-            <Offcanvas show={show} onHide={handleClose} placement="top">
-                <Offcanvas.Header closeButton>
-                    <Offcanvas.Title>Offcanvas</Offcanvas.Title>
-                </Offcanvas.Header>
-                <Offcanvas.Body>
-                    <ListGroup variant="flush" className="w-50">
-                        {cars.map((car, idx) =>
-                            <>
-                                <ListGroup.Item className="d-flex align-items-start">
-                                    <div className="p-2">{car.name}</div>
-                                    <div className="p-2">{car.price}</div>
-
-                                    <div className="ms-auto">
-                                        <Button variant="outline-secondary" size="sm" className="m-1">
-                                            <i className="bi bi-pencil-square"></i>
-                                        </Button>
-                                        <Button variant="outline-danger" size="sm" className="m-1">
-                                            <i className="bi bi-trash"></i>
-                                        </Button>
-                                    </div>
-
-                                </ListGroup.Item>
-                            </>
-                        )
-                        }
-                    </ListGroup>
-                </Offcanvas.Body>
-                <p>{JSON.stringify(myCars)}</p>
-
-            </Offcanvas>
+            <p>{JSON.stringify(myCars)}</p>
         </>
     );
 }
