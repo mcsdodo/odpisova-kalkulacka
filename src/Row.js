@@ -1,5 +1,5 @@
 import P from './P.js'
-import { OverlayTrigger, Tooltip, Form, InputGroup, FloatingLabel } from 'react-bootstrap';
+import { OverlayTrigger, Tooltip, Form, FloatingLabel } from 'react-bootstrap';
 
 function Row({ label, children, tooltip }) {
 

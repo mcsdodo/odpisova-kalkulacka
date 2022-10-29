@@ -1,44 +1,30 @@
 import P from './P.js'
 import { useState, useContext } from 'react';
-import { Container, Form, Row, Col, Tabs, Tab } from 'react-bootstrap';
+import { Form, Row, Col } from 'react-bootstrap';
 import { CarsContext } from './CarsContext';
 
 function Summary() {
 
-    const vat = 0.2;
-    const tax = 0.21;
-    const divTax = 0.07;
-    const insuranceRatio = 0.02761;
-
-    const [myCars, setMyCars] = useContext(CarsContext);
-
-    const [myCarId, setMyCarId] = useState(0);
+    const [myCars, setCarPropWithId, settings] = useContext(CarsContext);
+    const [myCarId, setMyCarId] = useState(myCars[0].id);
 
     const setCarProp = (prop, val) => setCarPropWithId(myCarId, prop, val);
 
-    const setCarPropWithId = (id, prop, val) => setMyCars(prev => {
-        const updatedCar = { ...prev[id], [prop]: val };
-        const updatedCars = { ...prev, [id]: updatedCar };
-        return updatedCars;
-    });
-
     const [selling, setSelling] = useState(true);
 
-    const myCar = () => myCars[myCarId];
+    const myCar = () => myCars.find(car => car.id === myCarId);
 
     const [startingFunds, setFunds] = useState(8000);
-    const [useStartingFunds, setUseStartingFunds] = useState(true);
     const [writeoffPeriods, setWriteoffPeriods] = useState(5);
 
-    const getPriceExVAT = () => -Math.round(myCar().price / (1 + vat));
-    const getInsurance = () => -Math.round(myCar().price * insuranceRatio) * myCar().writeoff;
-    const getTotalWriteoff = () => -Math.round((getPriceExVAT() + getInsurance()) * tax);
+    const getPriceExVAT = () => -Math.round(myCar().price / (1 + settings.vat));
+    const getInsurance = () => -Math.round(myCar().price * settings.insuranceRatio) * myCar().writeoff;
+    const getTotalWriteoff = () => -Math.round((getPriceExVAT() + getInsurance()) * settings.tax);
     const getResaleValue = () => Math.round(-getPriceExVAT() * myCar().resaleValue);
-    const getResaleTax = () => -Math.round(getResaleValue() * tax);
+    const getResaleTax = () => -Math.round(getResaleValue() * settings.tax);
     const getTotalCost = () => getPriceExVAT() + getInsurance() + getTotalWriteoff() +
         getResaleValue() + getResaleTax();
-    const getFirstCarTotalCost = () => getTotalCost() + Number.parseInt(useStartingFunds ? startingFunds : 0);;
-    const getTotalNetCost = () => getTotalCost() * (1 - divTax);
+    const getFirstCarTotalCost = () => getTotalCost() + Number.parseInt(startingFunds);
 
     const getNextCarCosts = () => [...Array(writeoffPeriods - 1)].map(c => getTotalCost());
 
@@ -62,7 +48,7 @@ function Summary() {
                         <P.Row label="Vstupný kapitál"
                             tooltip="Použi v prípade, že začínaš podnikať a vložíš/predáš súkromné auto do vlastnej firmy.">
                             <Form.Control type="number" value={startingFunds} min="0" step="500"
-                                onChange={e => setFunds(e.target.value)} disabled={!useStartingFunds} />
+                                onChange={e => setFunds(e.target.value)} />
                         </P.Row>
                     </P.Row>
                 </Col>
@@ -70,7 +56,7 @@ function Summary() {
                     <P.Row label="Dĺžka odpisu"
                         tooltip="Pre elektrické/plugin-hybridné vozidlá možnosť 2 roky. Ostatné 4.">
                         <Form.Control type="number" min="2" max="4"
-                            value={myCars[myCarId].writeoff} name="writeoff"
+                            value={myCar().writeoff} name="writeoff"
                             onChange={(e) => {
                                 setCarProp(e.target.name, e.target.value);
                                 let writeoffint = Number.parseInt(e.target.value);
@@ -84,7 +70,7 @@ function Summary() {
                     <P.Row label="Zostatková hodnota %"
                         tooltip="Automatická zmena so zmenou odpisu. (1-0.1*odpis)"                >
                         <Form.Control type="number" step="0.1" min="0.0" max="1.0"
-                            value={myCars[myCarId].resaleValue} name="resaleValue"
+                            value={myCar().resaleValue} name="resaleValue"
                             onChange={(e) => setCarProp(e.target.name, e.target.value)}
                         />
                     </P.Row>
@@ -98,13 +84,13 @@ function Summary() {
             <P.Row label={myCar().writeoff + " roky poistka"} tooltip="2.761% ročne z ceny auta.">
                 <Form.Control type="text" value={getInsurance()} disabled />
             </P.Row>
-            <P.Row label={myCar().writeoff + " roky odpisy"} tooltip={"Cena + poistenie * " + (tax * 100) + "%"}>
+            <P.Row label={myCar().writeoff + " roky odpisy"} tooltip={"Cena + poistenie * " + (settings.tax * 100) + "%"}>
                 <Form.Control type="text" value={getTotalWriteoff()} disabled />
             </P.Row>
             <P.Row label="Zostatková hodnota € (bez DPH)">
                 <Form.Control type="number" value={getResaleValue()} disabled />
             </P.Row>
-            <P.Row label="Daň z predaja €" tooltip={"Zostatková cena * " + (tax * 100) + "%"}>
+            <P.Row label="Daň z predaja €" tooltip={"Zostatková cena * " + (settings.tax * 100) + "%"}>
                 <Form.Control type="number" value={getResaleTax()} disabled />
             </P.Row>
             <Form.Label>Náklad 1. auto</Form.Label>
@@ -136,6 +122,7 @@ function Summary() {
             </P.CarRow>
 
             <p>{JSON.stringify(myCars)}</p>
+            <p>{JSON.stringify(settings)}</p>
         </Form>
     );
 }
