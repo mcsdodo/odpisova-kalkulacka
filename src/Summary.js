@@ -35,8 +35,8 @@ function Summary() {
                 <Form.Select
                     onChange={(e) => setMyCarId(e.target.value)}>
                     {
-                        Object.entries(myCars).map(([key, value]) =>
-                            <option key={key} value={key}>
+                        Object.entries(myCars).map(([, value]) =>
+                            <option key={value.id} value={value.id}>
                                 {value.name} ({value.price}€)
                             </option>)
                     }
@@ -120,9 +120,6 @@ function Summary() {
                     + (!selling ? -getResaleValue() : 0)} >
 
             </P.CarRow>
-
-            <p>{JSON.stringify(myCars)}</p>
-            <p>{JSON.stringify(settings)}</p>
         </Form>
     );
 }

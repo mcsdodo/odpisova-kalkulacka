@@ -23,16 +23,12 @@ const CarsContextProvider = ({ children }) => {
 
     const createNewCar = (car) => {
         const newCar = { ...car, id: crypto.randomUUID() };
-        setMyCars(prev => prev.push(newCar));
+        setMyCars(prev => {
+            prev.push(newCar)
+            return prev;
+        });
         return newCar;
     };
-
-    // for when myCars is object with structure [1]: {carobject}
-    // const setCarPropWithId = (id, prop, val) => setMyCars(prev => {
-    //     const updatedCar = { ...prev[id], [prop]: val };
-    //     const updatedCars = { ...prev, [id]: updatedCar };
-    //     return updatedCars;
-    // });
 
     const [settings, setSettings] = useState({
         vat: 0.2,
@@ -41,7 +37,7 @@ const CarsContextProvider = ({ children }) => {
     });
 
     return (
-        <CarsContext.Provider value={[myCars, setCarPropWithId, settings, setSettings]}>
+        <CarsContext.Provider value={[myCars, setCarPropWithId, settings, setSettings, createNewCar]}>
             {children}
         </CarsContext.Provider>
     )

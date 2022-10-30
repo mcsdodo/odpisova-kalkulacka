@@ -2,10 +2,11 @@ import P from './P.js'
 import { Form, Col, Row } from 'react-bootstrap';
 
 function CarRow({ writeoff, totalcost }) {
+    const years = (writeoff == 1 ? "rok" : (writeoff < 5 ? "roky" : "rokov"));
     return (
         <Row>
             <Col>
-                <P.Row label={"Celkovo / " + writeoff + " roky"}>
+                <P.Row label={"Celkovo / " + writeoff + " " + years}>
                     <Form.Control type="number" value={totalcost} disabled />
                 </P.Row>
             </Col>

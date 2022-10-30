@@ -15,6 +15,7 @@ function App() {
       <h1 className="header">Koľko stojí auto?</h1>
       <CarsContextProvider>
         <Tabs className="mb-3" defaultActiveKey="editor">
+          {/* <Tabs className="mb-3" > */}
           <Tab eventKey="summary" title="Zhrnutie">
             <P.Summary></P.Summary>
           </Tab>
