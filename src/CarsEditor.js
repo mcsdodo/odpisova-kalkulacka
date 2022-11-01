@@ -1,15 +1,13 @@
 import P from './P.js'
 import { Form, ListGroup, Button, Row, Col } from 'react-bootstrap';
 import React, { useContext, useReducer } from 'react';
-
 import { CarsContext } from './CarsContext';
-
 import CarsEditorRow from './CarsEditorRow.js';
 
 function CarsEditor() {
 
     const [myCars, , settings, setSettings] = useContext(CarsContext);
-    const [, forceUpdate] = useReducer(x => x + 1, 0);
+    const [, forceUpdate] = useReducer(x => x + 1, 0); //re-render editor with newly added car
 
     return (
         <>

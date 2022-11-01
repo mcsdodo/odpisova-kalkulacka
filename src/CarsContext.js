@@ -37,7 +37,11 @@ const CarsContextProvider = ({ children }) => {
     });
 
     return (
-        <CarsContext.Provider value={[myCars, setCarPropWithId, settings, setSettings, createNewCar]}>
+        <CarsContext.Provider value={[
+            myCars, setCarPropWithId,
+            settings, setSettings,
+            createNewCar
+        ]}>
             {children}
         </CarsContext.Provider>
     )

@@ -9,3 +9,7 @@
 .nav-link.active {
     font-weight: bold;
 }
+
+.cars-nav-link.nav-link.disabled {
+    color: red;
+}

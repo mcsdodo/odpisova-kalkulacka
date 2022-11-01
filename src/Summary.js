@@ -29,7 +29,6 @@ function Summary() {
     const getNextCarCosts = () => [...Array(writeoffPeriods - 1)].map(c => getTotalCost());
 
     return (
-
         <Form>
             <P.Row label="Auto">
                 <Form.Select

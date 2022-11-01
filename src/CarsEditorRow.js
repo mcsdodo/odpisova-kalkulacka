@@ -7,35 +7,38 @@ import * as yup from "yup"
 function CarsEditorRow({ car, children, forceUpdate }) {
 
     const schema = yup.object({
-        name: yup.string().required(),
-        price: yup.number().required(),
-        writeoff: yup.number().required(),
-        resaleValue: yup.number().required()
+        name: yup.string().required("Vyplň názov"),
+        price: yup.number().min(1, "Min. 1").required("Vyplň cenu"),
+        writeoff: yup.number().min(2, "Min. 2").max(4, "Max. 4").required("Vyplň dĺžku odpisu"),
+        resaleValue: yup.number().min(0, "Min. 0").max(1, "Max. 1").required("Vyplň zostatkovú hodnotu")
     });
-
     const [, setCarPropWithId, , , createNewCar] = useContext(CarsContext);
-
     return (
         <Formik initialValues={car}
-            validateOnChange="false"
-            validateOnBlur="false"
             enableReinitialize="true"
             onSubmit={(values, actions) => {
                 createNewCar(values)
                 forceUpdate();
+                actions.resetForm({
+                    values: {
+                        name: '',
+                        price: '',
+                        writeoff: '',
+                        resaleValue: ''
+                    }
+                })
             }}
             validationSchema={schema}>
             {({
                 handleSubmit,
                 handleChange,
-                handleBlur,
-                touched,
                 values,
                 errors,
+                isValid,
             }) => {
                 const handleChangeFacade = (e, parseImpl) => {
                     parseImpl = parseImpl || (() => e.target.value);
-                    const val = e.target.value ? parseImpl(e.target.value) : undefined;
+                    const val = (e.target.value) ? parseImpl(e.target.value) : undefined;
                     setCarPropWithId(car.id, e.target.name, val);
                     handleChange(e);
                 }
@@ -47,10 +50,10 @@ function CarsEditorRow({ car, children, forceUpdate }) {
                                 <Form.Control type="text" required
                                     name="name"
                                     value={values.name}
-                                    onChange={e => handleChangeFacade(e)}
+                                    onChange={handleChangeFacade}
                                     isInvalid={errors.name}
                                 />
-                                <Form.Control.Feedback type="invalid">Vyplň názov</Form.Control.Feedback>
+                                <Form.Control.Feedback type="invalid">{errors.name}</Form.Control.Feedback>
                             </div>
                             <div className="p-1">
                                 <InputGroup hasValidation >
@@ -61,7 +64,7 @@ function CarsEditorRow({ car, children, forceUpdate }) {
                                         isInvalid={errors.price}
                                     />
                                     <InputGroup.Text>€</InputGroup.Text>
-                                    <Form.Control.Feedback type="invalid">Vyplň cenu</Form.Control.Feedback>
+                                    <Form.Control.Feedback type="invalid">{errors.price}</Form.Control.Feedback>
                                 </InputGroup>
                             </div>
                             <div className="p-1">
@@ -71,7 +74,7 @@ function CarsEditorRow({ car, children, forceUpdate }) {
                                     onChange={e => handleChangeFacade(e, Number.parseFloat)}
                                     isInvalid={errors.writeoff}
                                 />
-                                <Form.Control.Feedback type="invalid">Vyplň dĺžku odpisu</Form.Control.Feedback>
+                                <Form.Control.Feedback type="invalid">{errors.writeoff}</Form.Control.Feedback>
                             </div>
                             <div className="p-1">
                                 <Form.Control type="number" min="0" max="1" step="0.1" required
@@ -79,13 +82,11 @@ function CarsEditorRow({ car, children, forceUpdate }) {
                                     name="resaleValue"
                                     onChange={e => handleChangeFacade(e, Number.parseFloat)}
                                     isInvalid={errors.resaleValue}
-                                    onBlur={handleBlur}
                                 />
-                                <Form.Control.Feedback type="invalid">Vyplň zostatkovú hodnotu</Form.Control.Feedback>
+                                <Form.Control.Feedback type="invalid">{errors.resaleValue}</Form.Control.Feedback>
                             </div>
                             {children}
                         </ListGroup.Item>
-                        {JSON.stringify(touched)}
                         {JSON.stringify(errors)}
                     </Form>
                 )

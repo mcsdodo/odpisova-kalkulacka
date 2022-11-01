@@ -2,7 +2,7 @@ import P from './P.js'
 import { Form, Col, Row } from 'react-bootstrap';
 
 function CarRow({ writeoff, totalcost }) {
-    const years = (writeoff == 1 ? "rok" : (writeoff < 5 ? "roky" : "rokov"));
+    const years = (writeoff === 1 ? "rok" : (writeoff < 5 ? "roky" : "rokov"));
     return (
         <Row>
             <Col>
