@@ -34,7 +34,6 @@ function App() {
           <P.CarsEditor myCars={myCars} setMyCars={setMyCars}></P.CarsEditor>
         </Tab>
       </Tabs>
-      {JSON.stringify(settings)}
     </Container>
   );
 }
