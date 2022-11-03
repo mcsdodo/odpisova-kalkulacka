@@ -5,15 +5,12 @@ import CarsEditorRow from './CarsEditorRow.js';
 function CarsEditor({ myCars, setMyCars }) {
 
     return (
-        <>
-            <ListGroup variant="flush" className="">
-                {myCars.map(car =>
-                    <CarsEditorRow car={car} key={car.id} myCars={myCars} setMyCars={setMyCars} />
-                )}
-                <CarsEditorRow car={{}} isAdd myCars={myCars} setMyCars={setMyCars} />
-            </ListGroup>
-            <p>{JSON.stringify(myCars)}</p>
-        </>
+        <ListGroup variant="flush" className="">
+            {myCars.map(car =>
+                <CarsEditorRow car={car} key={car.id} myCars={myCars} setMyCars={setMyCars} />
+            )}
+            <CarsEditorRow car={{}} isAdd myCars={myCars} setMyCars={setMyCars} />
+        </ListGroup>
     );
 }
 P.CarsEditor = CarsEditor;
