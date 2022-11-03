@@ -1,26 +1,25 @@
 import P from './P.js'
-import { useState, useContext } from 'react';
+import { useState } from 'react';
 import { Form, Row, Col } from 'react-bootstrap';
-import { CarsContext } from './CarsContext';
+import updateObjectPropertyInListById from "./Utils";
 
-function Summary() {
+function Summary({ settings, myCars, setMyCars }) {
 
-    const [myCars, setCarPropWithId, settings] = useContext(CarsContext);
     const [myCarId, setMyCarId] = useState(myCars[0].id);
-
-    const setCarProp = (prop, val) => setCarPropWithId(myCarId, prop, val);
-
+    console.log("Summary render", myCars, myCarId, myCars[0].id)
+    const setCarProp = (prop, val) => setMyCars(prev => {
+        return updateObjectPropertyInListById(prev, myCarId, prop, val)
+    });
     const [selling, setSelling] = useState(true);
 
-    const myCar = () => myCars.find(car => car.id === myCarId);
+    const myCar = myCars.find(car => car.id === myCarId);
 
     const [startingFunds, setFunds] = useState(8000);
     const [writeoffPeriods, setWriteoffPeriods] = useState(5);
-
-    const getPriceExVAT = () => -Math.round(myCar().price / (1 + settings.vat));
-    const getInsurance = () => -Math.round(myCar().price * settings.insuranceRatio) * myCar().writeoff;
+    const getPriceExVAT = () => -Math.round(myCar.price / (1 + settings.vat));
+    const getInsurance = () => -Math.round(myCar.price * settings.insuranceRatio) * myCar.writeoff;
     const getTotalWriteoff = () => -Math.round((getPriceExVAT() + getInsurance()) * settings.tax);
-    const getResaleValue = () => Math.round(-getPriceExVAT() * myCar().resaleValue);
+    const getResaleValue = () => Math.round(-getPriceExVAT() * myCar.resaleValue);
     const getResaleTax = () => -Math.round(getResaleValue() * settings.tax);
     const getTotalCost = () => getPriceExVAT() + getInsurance() + getTotalWriteoff() +
         getResaleValue() + getResaleTax();
@@ -55,7 +54,7 @@ function Summary() {
                     <P.Row label="Dĺžka odpisu"
                         tooltip="Pre elektrické/plugin-hybridné vozidlá možnosť 2 roky. Ostatné 4.">
                         <Form.Control type="number" min="2" max="4"
-                            value={myCar().writeoff} name="writeoff"
+                            value={myCar.writeoff} name="writeoff"
                             onChange={(e) => {
                                 setCarProp(e.target.name, e.target.value);
                                 let writeoffint = Number.parseInt(e.target.value);
@@ -69,7 +68,7 @@ function Summary() {
                     <P.Row label="Zostatková hodnota %"
                         tooltip="Automatická zmena so zmenou odpisu. (1-0.1*odpis)"                >
                         <Form.Control type="number" step="0.1" min="0.0" max="1.0"
-                            value={myCar().resaleValue} name="resaleValue"
+                            value={myCar.resaleValue} name="resaleValue"
                             onChange={(e) => setCarProp(e.target.name, e.target.value)}
                         />
                     </P.Row>
@@ -77,13 +76,13 @@ function Summary() {
             </Row>
             <Row>
             </Row>
-            <P.Row label="Bez DPH" tooltip="DPH 20%">
+            <P.Row label="Bez DPH" tooltip={"DPH " + (settings.vat * 100) + "%"}>
                 <Form.Control type="text" value={getPriceExVAT()} disabled></Form.Control>
             </P.Row>
-            <P.Row label={myCar().writeoff + " roky poistka"} tooltip="2.761% ročne z ceny auta.">
+            <P.Row label={myCar.writeoff + " roky poistka"} tooltip="2.761% ročne z ceny auta.">
                 <Form.Control type="text" value={getInsurance()} disabled />
             </P.Row>
-            <P.Row label={myCar().writeoff + " roky odpisy"} tooltip={"Cena + poistenie * " + (settings.tax * 100) + "%"}>
+            <P.Row label={myCar.writeoff + " roky odpisy"} tooltip={"Cena + poistenie * " + (settings.tax * 100) + "%"}>
                 <Form.Control type="text" value={getTotalWriteoff()} disabled />
             </P.Row>
             <P.Row label="Zostatková hodnota € (bez DPH)">
@@ -93,10 +92,10 @@ function Summary() {
                 <Form.Control type="number" value={getResaleTax()} disabled />
             </P.Row>
             <Form.Label>Náklad 1. auto</Form.Label>
-            <P.CarRow writeoff={myCar().writeoff} totalcost={getFirstCarTotalCost()} ></P.CarRow>
+            <P.CarRow writeoff={myCar.writeoff} totalcost={getFirstCarTotalCost()} ></P.CarRow>
             {getNextCarCosts().length > 0 && <Form.Label>Náklad 2. a ďalšie</Form.Label>}
             {getNextCarCosts().length > 0 &&
-                <P.CarRow writeoff={myCar().writeoff} totalcost={getNextCarCosts()[0]} ></P.CarRow>
+                <P.CarRow writeoff={myCar.writeoff} totalcost={getNextCarCosts()[0]} ></P.CarRow>
             }
             <Form.Label>Náklad dlhodobo</Form.Label>
             <Row>
@@ -113,7 +112,7 @@ function Summary() {
                     </P.Row>
                 </Col>
             </Row>
-            <P.CarRow writeoff={myCar().writeoff * writeoffPeriods}
+            <P.CarRow writeoff={myCar.writeoff * writeoffPeriods}
                 totalcost={getFirstCarTotalCost()
                     + getNextCarCosts().reduce((sum, c) => sum + c, 0)
                     + (!selling ? -getResaleValue() : 0)} >

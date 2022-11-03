@@ -1,10 +1,9 @@
 import { Formik } from "formik";
-import React, { useContext } from 'react';
-import { Form, ListGroup, InputGroup } from 'react-bootstrap';
-import { CarsContext } from './CarsContext';
+import { Form, ListGroup, InputGroup, Button } from 'react-bootstrap';
+import updateObjectPropertyInListById from "./Utils";
 import * as yup from "yup"
 
-function CarsEditorRow({ car, children, forceUpdate }) {
+function CarsEditorRow({ car, isAdd, myCars, setMyCars }) {
 
     const schema = yup.object({
         name: yup.string().required("Vyplň názov"),
@@ -12,13 +11,25 @@ function CarsEditorRow({ car, children, forceUpdate }) {
         writeoff: yup.number().min(2, "Min. 2").max(4, "Max. 4").required("Vyplň dĺžku odpisu"),
         resaleValue: yup.number().min(0, "Min. 0").max(1, "Max. 1").required("Vyplň zostatkovú hodnotu")
     });
-    const [, setCarPropWithId, , , createNewCar] = useContext(CarsContext);
+    console.log("EditorRow render")
+
+    const createNewCar = (car) => {
+        const newCar = { ...car, id: crypto.randomUUID() };
+        const newMyCars = myCars.concat(newCar);
+        setMyCars(newMyCars);
+        return newCar;
+    };
+
+    const removeCar = (id) => {
+        const newList = myCars.filter(car => car.id !== id);
+        setMyCars(newList);
+    };
+
     return (
         <Formik initialValues={car}
             enableReinitialize="true"
             onSubmit={(values, actions) => {
                 createNewCar(values)
-                forceUpdate();
                 actions.resetForm({
                     values: {
                         name: '',
@@ -34,12 +45,14 @@ function CarsEditorRow({ car, children, forceUpdate }) {
                 handleChange,
                 values,
                 errors,
-                isValid,
             }) => {
                 const handleChangeFacade = (e, parseImpl) => {
                     parseImpl = parseImpl || (() => e.target.value);
                     const val = (e.target.value) ? parseImpl(e.target.value) : undefined;
-                    setCarPropWithId(car.id, e.target.name, val);
+
+                    setMyCars(prev => {
+                        return updateObjectPropertyInListById(prev, car.id, e.target.name, val);
+                    })
                     handleChange(e);
                 }
 
@@ -85,13 +98,20 @@ function CarsEditorRow({ car, children, forceUpdate }) {
                                 />
                                 <Form.Control.Feedback type="invalid">{errors.resaleValue}</Form.Control.Feedback>
                             </div>
-                            {children}
+                            {isAdd && <div className="p-1">
+                                <Button variant="success" type="submit">
+                                    <i className="bi bi-plus-square"></i>
+                                </Button>
+                            </div>}
+                            {!isAdd && <div className="p-1">
+                                <Button variant="danger" onClick={() => removeCar(car.id)}>
+                                    <i className="bi bi-trash"></i>
+                                </Button>
+                            </div>}
                         </ListGroup.Item>
-                        {JSON.stringify(errors)}
                     </Form>
                 )
             }}
-
         </Formik>
     )
 }
