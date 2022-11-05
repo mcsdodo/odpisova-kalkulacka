@@ -58,7 +58,7 @@ function Summary({ settings, myCars, setMyCars }) {
                             onChange={(e) => {
                                 setCarProp(e.target.name, e.target.value);
                                 let writeoffint = Number.parseInt(e.target.value);
-                                setCarProp("resaleValue", 1 - (0.1 * writeoffint));
+                                setCarProp("resaleValue", 100 - (10 * writeoffint));
                             }
                             }
                         />
