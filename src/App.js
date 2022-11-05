@@ -10,7 +10,7 @@ import { useState } from 'react';
 import { Container, Tabs, Tab } from 'react-bootstrap';
 
 function App() {
-
+  const debug = false;
   const [settings, setSettings] = useState({
     vat: 0.2,
     tax: 0.21,
@@ -23,9 +23,9 @@ function App() {
   ]);
 
   return (
-    <Container className="p-5 mb-4 mt-4 bg-light rounded-3">
+    <Container className="p-5 bg-light rounded-3" >
       <h1 className="header">Koľko stojí auto?</h1>
-      <Tabs className="mb-3" defaultActiveKey="editor">
+      <Tabs className="mb-3" defaultActiveKey="editor" unmountOnExit="true">
         <Tab eventKey="summary" title="Zhrnutie" tabClassName="cars-nav-link">
           <P.Summary settings={settings} myCars={myCars} setMyCars={setMyCars}></P.Summary>
         </Tab>
@@ -34,8 +34,8 @@ function App() {
           <P.CarsEditor myCars={myCars} setMyCars={setMyCars}></P.CarsEditor>
         </Tab>
       </Tabs>
-      <p>{JSON.stringify(myCars)}</p>
-      <p>{JSON.stringify(settings)}</p>
+      {debug && <p>{JSON.stringify(myCars)}</p>}
+      {debug && <p>{JSON.stringify(settings)}</p>}
     </Container>
   );
 }
