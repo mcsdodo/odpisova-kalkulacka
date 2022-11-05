@@ -41,7 +41,7 @@ function Summary({ settings, myCars, setMyCars }) {
                 </Form.Select>
             </P.Row>
             <Row>
-                <Col>
+                <Col sm>
                     <P.Row>
                         <P.Row label="Vstupný kapitál"
                             tooltip="Použi v prípade, že začínaš podnikať a vložíš/predáš súkromné auto do vlastnej firmy.">
@@ -50,7 +50,7 @@ function Summary({ settings, myCars, setMyCars }) {
                         </P.Row>
                     </P.Row>
                 </Col>
-                <Col>
+                <Col sm>
                     <P.Row label="Dĺžka odpisu"
                         tooltip="Pre elektrické/plugin-hybridné vozidlá možnosť 2 roky. Ostatné 4.">
                         <Form.Control type="number" min="2" max="4"
@@ -64,7 +64,7 @@ function Summary({ settings, myCars, setMyCars }) {
                         />
                     </P.Row>
                 </Col>
-                <Col>
+                <Col sm>
                     <P.Row label="Zostatková hodnota %"
                         tooltip="Automatická zmena so zmenou odpisu. (1-0.1*odpis)"                >
                         <Form.Control type="number" step="0.1" min="0.0" max="1.0"
@@ -99,13 +99,13 @@ function Summary({ settings, myCars, setMyCars }) {
             }
             <Form.Label>Náklad dlhodobo</Form.Label>
             <Row>
-                <Col>
+                <Col sm>
                     <P.Row label="Počet odpisových období" tooltip="">
                         <Form.Control type="number" min="1" max="10"
                             value={writeoffPeriods} onChange={e => setWriteoffPeriods(e.target.value)} />
                     </P.Row>
                 </Col>
-                <Col>
+                <Col sm>
                     <P.Row>
                         <Form.Check type="switch" label="Predaj na konci podnikania"
                             checked={selling} onChange={e => setSelling(!selling)} />

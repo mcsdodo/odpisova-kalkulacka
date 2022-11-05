@@ -58,7 +58,7 @@ function CarsEditorRow({ car, isAdd, myCars, setMyCars }) {
 
                 return (
                     <Form noValidate onSubmit={handleSubmit}>
-                        <ListGroup.Item className="d-flex align-items-start rounded-3 mb-2 border">
+                        <ListGroup.Item className="d-md-flex rounded-3 mb-2 border">
                             <div className="p-1">
                                 <Form.Control type="text" required
                                     name="name"
