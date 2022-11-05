@@ -6,7 +6,7 @@ function SettingsEditor({ settings, setSettings }) {
         <Row>
             <Col sm>
                 <P.Row label="DPH %">
-                    <Form.Control type="number" min="0" max="1" step="0.01"
+                    <Form.Control type="number" min="0" max="100" step="1"
                         value={settings.vat} name="vat"
                         onChange={(e) => setSettings(previous => ({ ...previous, vat: Number.parseFloat(e.target.value) }))}
                     />
@@ -14,7 +14,7 @@ function SettingsEditor({ settings, setSettings }) {
             </Col>
             <Col sm>
                 <P.Row label="Daň z príjmu PO %">
-                    <Form.Control type="number" min="0" max="1" step="0.01"
+                    <Form.Control type="number" min="0" max="100" step="1"
                         value={settings.tax} name="tax"
                         onChange={(e) => setSettings(previous => ({ ...previous, tax: Number.parseFloat(e.target.value) }))}
                     />
@@ -22,7 +22,7 @@ function SettingsEditor({ settings, setSettings }) {
             </Col>
             <Col sm>
                 <P.Row label="Poistenie %">
-                    <Form.Control type="number" min="0" max="1" step="0.00001"
+                    <Form.Control type="number" min="0" max="20" step="0.001"
                         value={settings.insuranceRatio} name="insuranceRatio"
                         onChange={(e) => setSettings(previous => ({ ...previous, insuranceRatio: Number.parseFloat(e.target.value) }))}
                     />

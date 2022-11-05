@@ -12,14 +12,14 @@ import { Container, Tabs, Tab } from 'react-bootstrap';
 function App() {
   const debug = false;
   const [settings, setSettings] = useState({
-    vat: 0.2,
-    tax: 0.21,
-    insuranceRatio: 0.02761
+    vat: 20,
+    tax: 21,
+    insuranceRatio: 2.761
   });
 
   const [myCars, setMyCars] = useState([
-    { name: "RAV4 Prime", price: 53186, writeoff: 2, resaleValue: 0.8, id: crypto.randomUUID() },
-    { name: "RAV4 Hybrid", price: 43236, writeoff: 4, resaleValue: 0.6, id: crypto.randomUUID() },
+    { name: "RAV4 Prime", price: 53186, writeoff: 2, resaleValue: 80, id: crypto.randomUUID() },
+    { name: "RAV4 Hybrid", price: 43236, writeoff: 4, resaleValue: 60, id: crypto.randomUUID() },
   ]);
 
   return (

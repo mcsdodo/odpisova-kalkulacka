@@ -9,7 +9,7 @@ function CarsEditorRow({ car, isAdd, myCars, setMyCars }) {
         name: yup.string().required("Vyplň názov"),
         price: yup.number().min(1, "Min. 1").required("Vyplň cenu"),
         writeoff: yup.number().min(2, "Min. 2").max(4, "Max. 4").required("Vyplň dĺžku odpisu"),
-        resaleValue: yup.number().min(0, "Min. 0").max(1, "Max. 1").required("Vyplň zostatkovú hodnotu")
+        resaleValue: yup.number().min(0, "Min. 0").max(100, "Max. 100").required("Vyplň zostatkovú hodnotu")
     });
     console.log("EditorRow render")
 
@@ -90,7 +90,7 @@ function CarsEditorRow({ car, isAdd, myCars, setMyCars }) {
                                 <Form.Control.Feedback type="invalid">{errors.writeoff}</Form.Control.Feedback>
                             </div>
                             <div className="p-1">
-                                <Form.Control type="number" min="0" max="1" step="0.1" required
+                                <Form.Control type="number" min="0" max="100" step="5" required
                                     value={values.resaleValue}
                                     name="resaleValue"
                                     onChange={e => handleChangeFacade(e, Number.parseFloat)}

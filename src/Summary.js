@@ -16,11 +16,11 @@ function Summary({ settings, myCars, setMyCars }) {
 
     const [startingFunds, setFunds] = useState(8000);
     const [writeoffPeriods, setWriteoffPeriods] = useState(5);
-    const getPriceExVAT = () => -Math.round(myCar.price / (1 + settings.vat));
-    const getInsurance = () => -Math.round(myCar.price * settings.insuranceRatio) * myCar.writeoff;
-    const getTotalWriteoff = () => -Math.round((getPriceExVAT() + getInsurance()) * settings.tax);
-    const getResaleValue = () => Math.round(-getPriceExVAT() * myCar.resaleValue);
-    const getResaleTax = () => -Math.round(getResaleValue() * settings.tax);
+    const getPriceExVAT = () => -Math.round(myCar.price / (1 + settings.vat / 100));
+    const getInsurance = () => -Math.round(myCar.price * settings.insuranceRatio / 100) * myCar.writeoff;
+    const getTotalWriteoff = () => -Math.round((getPriceExVAT() + getInsurance()) * settings.tax / 100);
+    const getResaleValue = () => Math.round(-getPriceExVAT() * myCar.resaleValue / 100);
+    const getResaleTax = () => -Math.round(getResaleValue() * settings.tax / 100);
     const getTotalCost = () => getPriceExVAT() + getInsurance() + getTotalWriteoff() +
         getResaleValue() + getResaleTax();
     const getFirstCarTotalCost = () => getTotalCost() + Number.parseInt(startingFunds);
@@ -67,7 +67,7 @@ function Summary({ settings, myCars, setMyCars }) {
                 <Col sm>
                     <P.Row label="Zostatková hodnota %"
                         tooltip="Automatická zmena so zmenou odpisu. (1-0.1*odpis)"                >
-                        <Form.Control type="number" step="0.1" min="0.0" max="1.0"
+                        <Form.Control type="number" step="5" min="0" max="100"
                             value={myCar.resaleValue} name="resaleValue"
                             onChange={(e) => setCarProp(e.target.name, e.target.value)}
                         />
@@ -76,19 +76,19 @@ function Summary({ settings, myCars, setMyCars }) {
             </Row>
             <Row>
             </Row>
-            <P.Row label="Bez DPH" tooltip={"DPH " + (settings.vat * 100) + "%"}>
+            <P.Row label="Bez DPH" tooltip={"DPH " + (settings.vat) + "%"}>
                 <Form.Control type="text" value={getPriceExVAT()} disabled></Form.Control>
             </P.Row>
             <P.Row label={myCar.writeoff + " roky poistka"} tooltip="2.761% ročne z ceny auta.">
                 <Form.Control type="text" value={getInsurance()} disabled />
             </P.Row>
-            <P.Row label={myCar.writeoff + " roky odpisy"} tooltip={"Cena + poistenie * " + (settings.tax * 100) + "%"}>
+            <P.Row label={myCar.writeoff + " roky odpisy"} tooltip={"Cena + poistenie * " + (settings.tax) + "%"}>
                 <Form.Control type="text" value={getTotalWriteoff()} disabled />
             </P.Row>
             <P.Row label="Zostatková hodnota € (bez DPH)">
                 <Form.Control type="number" value={getResaleValue()} disabled />
             </P.Row>
-            <P.Row label="Daň z predaja €" tooltip={"Zostatková cena * " + (settings.tax * 100) + "%"}>
+            <P.Row label="Daň z predaja €" tooltip={"Zostatková cena * " + (settings.tax) + "%"}>
                 <Form.Control type="number" value={getResaleTax()} disabled />
             </P.Row>
             <Form.Label>Náklad 1. auto</Form.Label>
