@@ -6,7 +6,8 @@ import updateObjectPropertyInListById from "./Utils";
 function Summary({ settings, myCars, setMyCars }) {
 
     const [myCarId, setMyCarId] = useState(myCars[0].id);
-    console.log("Summary render", myCars, myCarId, myCars[0].id)
+    if (window.debug)
+        console.log("Summary render", myCars, myCarId, myCars[0].id)
     const setCarProp = (prop, val) => setMyCars(prev => {
         return updateObjectPropertyInListById(prev, myCarId, prop, val)
     });

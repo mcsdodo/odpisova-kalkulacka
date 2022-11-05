@@ -11,7 +11,8 @@ function CarsEditorRow({ car, isAdd, myCars, setMyCars }) {
         writeoff: yup.number().min(2, "Min. 2").max(4, "Max. 4").required("Vyplň dĺžku odpisu"),
         resaleValue: yup.number().min(0, "Min. 0").max(100, "Max. 100").required("Vyplň zostatkovú hodnotu")
     });
-    console.log("EditorRow render")
+    if (window.debug)
+        console.log("EditorRow render")
 
     const createNewCar = (car) => {
         const newCar = { ...car, id: crypto.randomUUID() };
@@ -58,7 +59,7 @@ function CarsEditorRow({ car, isAdd, myCars, setMyCars }) {
 
                 return (
                     <Form noValidate onSubmit={handleSubmit}>
-                        <ListGroup.Item className="d-md-flex rounded-3 mb-2 border">
+                        <ListGroup.Item className="d-md-flex rounded-3 mb-2 border justify-content-between">
                             <div className="p-1">
                                 <Form.Control type="text" required
                                     name="name"
