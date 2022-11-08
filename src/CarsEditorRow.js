@@ -1,6 +1,6 @@
 import { Formik } from "formik";
 import { Form, ListGroup, InputGroup, Button } from 'react-bootstrap';
-import updateObjectPropertyInListById from "./Utils";
+import { updateObjectPropertyInListById } from "./Utils";
 import * as yup from "yup"
 
 function CarsEditorRow({ car, isAdd, myCars, setMyCars }) {

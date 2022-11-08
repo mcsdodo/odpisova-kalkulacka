@@ -1,7 +1,7 @@
 import P from './P.js'
 import { useState } from 'react';
 import { Form, Row, Col } from 'react-bootstrap';
-import updateObjectPropertyInListById from "./Utils";
+import { updateObjectPropertyInListById } from "./Utils";
 
 function Summary({ settings, myCars, setMyCars }) {
 

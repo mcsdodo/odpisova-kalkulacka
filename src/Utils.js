@@ -9,4 +9,9 @@ const updateObjectPropertyInListById = (list, id, prop, val) => {
     return newList;
 };
 
-export default updateObjectPropertyInListById;
+const doSomething = (a) => a;
+
+
+export { updateObjectPropertyInListById, doSomething };
+
+
