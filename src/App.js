@@ -6,20 +6,32 @@ import './Summary'
 import './SettingsEditor'
 import P from './P';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Container, Tabs, Tab } from 'react-bootstrap';
 
 function App() {
-  const [settings, setSettings] = useState({
+  const initialSettingsValues = localStorage["settings"] ? JSON.parse(localStorage["settings"]) : {
     vat: 20,
     tax: 21,
     insuranceRatio: 2.761
-  });
+  };
 
-  const [myCars, setMyCars] = useState([
-    { name: "RAV4 Prime", price: 53186, writeoff: 2, resaleValue: 80, id: crypto.randomUUID() },
+  const [settings, setSettings] = useState(initialSettingsValues);
+
+  useEffect(() => {
+    localStorage.setItem('settings', JSON.stringify(settings));
+  }, [settings]);
+
+  const initialCarsValues = localStorage['myCars'] ? JSON.parse(localStorage['myCars']) : [
+    { name: "RAV4 Plug In", price: 53186, writeoff: 2, resaleValue: 80, id: crypto.randomUUID() },
     { name: "RAV4 Hybrid", price: 43236, writeoff: 4, resaleValue: 60, id: crypto.randomUUID() },
-  ]);
+  ];
+
+  const [myCars, setMyCars] = useState(initialCarsValues);
+
+  useEffect(() => {
+    localStorage.setItem('myCars', JSON.stringify(myCars));
+  }, [myCars]);
 
   return (
     <Container className="p-5 bg-light rounded-3" >
