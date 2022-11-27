@@ -47,7 +47,7 @@ function Summary({ settings, myCars, setMyCars }) {
                         <P.Row label="Vstupný kapitál"
                             tooltip="Použi v prípade, že začínaš podnikať a vložíš/predáš súkromné auto do vlastnej firmy.">
                             <Form.Control type="number" value={startingFunds} min="0" step="500"
-                                onChange={e => setFunds(e.target.value)} />
+                                onChange={e => setFunds(Number.parseInt(e.target.value))} />
                         </P.Row>
                     </P.Row>
                 </Col>
@@ -70,7 +70,7 @@ function Summary({ settings, myCars, setMyCars }) {
                         tooltip="Automatická zmena so zmenou odpisu. (1-0.1*odpis)"                >
                         <Form.Control type="number" step="5" min="0" max="100"
                             value={myCar.resaleValue} name="resaleValue"
-                            onChange={(e) => setCarProp(e.target.name, e.target.value)}
+                            onChange={(e) => setCarProp(e.target.name, Number.parseInt(e.target.value))}
                         />
                     </P.Row>
                 </Col>
@@ -103,7 +103,7 @@ function Summary({ settings, myCars, setMyCars }) {
                 <Col sm>
                     <P.Row label="Počet odpisových období" tooltip="">
                         <Form.Control type="number" min="1" max="10"
-                            value={writeoffPeriods} onChange={e => setWriteoffPeriods(e.target.value)} />
+                            value={writeoffPeriods} onChange={e => setWriteoffPeriods(Number.parseInt(e.target.value))} />
                     </P.Row>
                 </Col>
                 <Col sm>
